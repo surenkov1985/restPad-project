@@ -159,4 +159,16 @@ router.get("/getProducts:category", (req, res) => {
 	});
 });
 
+router.delete("/deleteProduct", (req, res) => {
+
+
+	pool.query("DELETE FROM REST_PRODUCTS WHERE id=?", req.body.id, (err, data) => {
+		if (err) {
+			return res.status(400).json({message: err})
+		}
+
+		return res.status(200).json(data)
+	}) 
+})
+
 module.exports = router;

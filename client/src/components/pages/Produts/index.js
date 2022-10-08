@@ -1,16 +1,29 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useLazyGetProductsQuery } from "../../../stores/apiReducer";
+import { useDeleteProductMutation, useLazyGetProductsQuery } from "../../../stores/apiReducer";
 import { categoryToggle, setCategory, setProducts } from "../../../stores/dataReducer";
 import { ButtonElem, FormHead, FormTitle } from "../AddProduct/style";
-import { CategoriesBlock, CategoryItem, CategoryList, ProductBlock, ProductsCont, ProductsContent } from "./style";
+import {
+	CategoriesBlock,
+	CategoryItem,
+	CategoryList,
+	ItemCell,
+	ListHead,
+	ProductBlock,
+	ProductItem,
+	ProductList,
+	ProductsCont,
+	ProductsContent,
+} from "./style";
+import { AiOutlineClose } from "react-icons/ai";
 
 export const ProductsPage = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	let { products, categories, categoryProduct } = useSelector((state) => state.data);
 	const [getProducts] = useLazyGetProductsQuery();
+	const [deleteProduct] = useDeleteProductMutation();
 
 	useEffect(() => {
 		getProducts(categoryProduct)
@@ -36,6 +49,23 @@ export const ProductsPage = () => {
 		dispatch(categoryToggle(newCategories));
 	};
 
+	const deleteProductHandler = (id) => {
+		deleteProduct({ id: id })
+			.unwrap()
+			.then((data) => {
+				getProducts(categoryProduct)
+					.unwrap()
+					.then((data) => {
+						console.log(data);
+						dispatch(setProducts(data));
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			})
+			.catch((err) => console.log(err.data.message));
+	};
+
 	return (
 		<ProductsCont>
 			<FormHead>
@@ -53,9 +83,9 @@ export const ProductsPage = () => {
 						})}
 					</CategoryList>
 				</CategoriesBlock>
-				<div>
+				<ProductBlock>
 					<FormHead>
-						<FormTitle>Роллы</FormTitle>
+						<FormTitle>{categoryProduct}</FormTitle>
 
 						<ButtonElem
 							onClick={(e) => {
@@ -65,14 +95,35 @@ export const ProductsPage = () => {
 							Новый товар
 						</ButtonElem>
 					</FormHead>
-					<ProductBlock>
+					<ProductList>
+						<ListHead>
+							<ItemCell>Наименование</ItemCell>
+							<ItemCell>Цена</ItemCell>
+							<ItemCell>Ед.</ItemCell>
+							<ItemCell>Арт.</ItemCell>
+							<ItemCell>Цвет</ItemCell>
+							<ItemCell>Описание</ItemCell>
+							<ItemCell></ItemCell>
+						</ListHead>
 						<ul>
 							{products.map((res) => {
-								return <li key={res.id}>{res.title}</li>;
+								return (
+									<ProductItem key={res.id}>
+										<ItemCell>{res.title}</ItemCell>
+										<ItemCell>{res.price}</ItemCell>
+										<ItemCell>{res.unit}</ItemCell>
+										<ItemCell>{res.article}</ItemCell>
+										<ItemCell>{res.color}</ItemCell>
+										<ItemCell>{res.description}</ItemCell>
+										<ItemCell onClick={(e) => deleteProductHandler(res.id)}>
+											<AiOutlineClose color="red" />
+										</ItemCell>
+									</ProductItem>
+								);
 							})}
 						</ul>
-					</ProductBlock>
-				</div>
+					</ProductList>
+				</ProductBlock>
 			</ProductsContent>
 		</ProductsCont>
 	);

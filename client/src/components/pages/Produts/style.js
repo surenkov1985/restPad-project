@@ -38,5 +38,26 @@ export const CategoryItem = styled.li`
 `;
 
 export const ProductBlock = styled.div`
+	width: 100%;
+`;
+
+export const ProductList = styled.div`
+	width: 100%;
 	padding: 10px 20px;
+`;
+
+export const ProductItem = styled.li`
+	padding: 5px 20px;
+	width: 100%;
+	display: grid;
+	grid-template-columns: 5fr repeat(4, 1fr) 11fr 0.5fr;
+	align-items: center;
+`;
+
+export const ItemCell = styled.div`
+	padding: 5px;
+`;
+
+export const ListHead = styled(ProductItem)`
+	background: #f7f7f7;
 `;

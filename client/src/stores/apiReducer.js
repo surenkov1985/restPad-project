@@ -30,17 +30,27 @@ export const apiReducer = createApi({
 				method: "POST",
 				body: data,
 				headers: {
-					"Contennt-Type": "applicetion/json"
-				}
-			})
+					"Contennt-Type": "applicetion/json",
+				},
+			}),
 		}),
 		getProducts: build.query({
 			query: (url) => ({
 				url: `/getProducts${url}`,
-				method: "GET"
-			})
-		})
+				method: "GET",
+			}),
+		}),
+		deleteProduct: build.mutation({
+			query: (data) => ({
+				url: "/deleteProduct",
+				body: data,
+				method: "DELETE",
+				headers: {
+					"Content-type": "application/json",
+				},
+			}),
+		}),
 	}),
 });
 
-export const {useLoginMutation, useRegisterMutation, useAddProductMutation, useLazyGetProductsQuery} = apiReducer
+export const { useLoginMutation, useRegisterMutation, useAddProductMutation, useLazyGetProductsQuery, useDeleteProductMutation } = apiReducer;
