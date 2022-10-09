@@ -2,23 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-	useLoginMutation,
-	useRegisterMutation,
-} from "../../../stores/apiReducer";
-import {
-	ErrorEl,
-	Form,
-	FormContainer,
-	FormPage,
-	Input,
-	InputTitle,
-	Label,
-	NavigateBtn,
-	NavigateEl,
-	Submit,
-	Title,
-} from "./style";
+import { useLoginMutation, useRegisterMutation } from "../../../stores/apiReducer";
+import { ErrorEl, Form, FormContainer, FormPage, Input, InputTitle, Label, NavigateBtn, NavigateEl, Submit, Title } from "./style";
 
 export const Register = () => {
 	const { register, handleSubmit } = useForm({
@@ -33,7 +18,7 @@ export const Register = () => {
 
 	useEffect(() => {
 		if (localStorage.hasOwnProperty("restPadUser")) {
-			navigate("../admin", { replace: true });
+			navigate("../addOrder", { replace: true });
 			dispatch(authToggle(true));
 		}
 	}, []);
@@ -46,12 +31,9 @@ export const Register = () => {
 					loginFetch(data)
 						.unwrap()
 						.then((loginData) => {
-							localStorage.setItem(
-								"restPadUser",
-								JSON.stringify(loginData)
-							);
+							localStorage.setItem("restPadUser", JSON.stringify(loginData));
 							dispatch(authToggle(true));
-							navigate("../admin", { replace: true });
+							navigate("../addOrder", { replace: true });
 						})
 						.catch((err) => {
 							setError(err.data.message);
@@ -77,11 +59,7 @@ export const Register = () => {
 					{error && <ErrorEl>{error}</ErrorEl>}
 					<Label>
 						<InputTitle>Email</InputTitle>
-						<Input
-							type="text"
-							placeholder="Введите email"
-							{...register("email")}
-						/>
+						<Input type="text" placeholder="Введите email" {...register("email")} />
 					</Label>
 
 					<Submit type="submit" value="Зарегистрироваться" />

@@ -3,11 +3,13 @@ import { useDispatch } from "react-redux";
 import { Routes, Route, HashRouter, BrowserRouter } from "react-router-dom";
 import { authToggle } from "../stores/dataReducer";
 import { Layout } from "./Layout";
+import { AddOrder } from "./pages/AddOrder/AddOrder";
 import { AddProductPage } from "./pages/AddProduct/AddProductPage";
-import { AdminPage } from "./pages/Admin";
-import { LoginPage } from "./pages/Login";
-import { ProductsPage } from "./pages/Produts";
-import { Register } from "./pages/Register";
+import { AdminPage } from "./pages/Admin/Admin";
+import { EditProductPage } from "./pages/EditProductPage/EditProductPage";
+import { LoginPage } from "./pages/Login/Login";
+import { ProductsPage } from "./pages/Produts/Products";
+import { Register } from "./pages/Register/Register";
 
 export const App = () => {
 	const dispatch = useDispatch();
@@ -27,6 +29,8 @@ export const App = () => {
 					<Route path="admin" element={<AdminPage />} />
 					<Route path="products" element={<ProductsPage />} />
 					<Route path="addProduct" element={<AddProductPage />} />
+					<Route path="addOrder" element={<AddOrder/>}/>
+					<Route path="editProduct" element={<EditProductPage/>}/>
 				</Route>
 			</Routes>
 		</BrowserRouter>

@@ -2,8 +2,12 @@ import styled from "styled-components";
 
 export const FormContainer = styled.form`
 	width: 100%;
+	height: 100%;
 	display: flex;
 	flex-direction: column;
+	background: #ffffff;
+	border-radius: 8px;
+	box-shadow: 0px 0px 8px 0px rgba(34, 60, 80, 0.2);
 `;
 
 export const FormHead = styled.div`
@@ -61,14 +65,14 @@ export const ButtonElem = styled.button`
 	border-radius: 5px;
 	padding: 10px 20px;
 	min-width: 100px;
-	background: #bdc2bd;
+	background: #e0e0e0;
 	color: #000000;
 	cursor: pointer;
 	transition: all 0.1s;
 	margin-left: 10px;
 
 	&:hover {
-		background: #717371;
+		background: #c2c2c2;
 		color: #ffffff;
 	}
 `;

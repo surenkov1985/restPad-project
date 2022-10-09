@@ -8,9 +8,11 @@ import {
 	CategoriesBlock,
 	CategoryItem,
 	CategoryList,
+	EditLink,
 	ItemCell,
 	ListHead,
 	ProductBlock,
+	ProductHead,
 	ProductItem,
 	ProductList,
 	ProductsCont,
@@ -66,11 +68,15 @@ export const ProductsPage = () => {
 			.catch((err) => console.log(err.data.message));
 	};
 
+	const editProductHandler = (data) => {
+		console.log(data);
+	};
+
 	return (
 		<ProductsCont>
-			<FormHead>
+			<ProductHead>
 				<FormTitle>Товары</FormTitle>
-			</FormHead>
+			</ProductHead>
 			<ProductsContent>
 				<CategoriesBlock>
 					<CategoryList>
@@ -109,7 +115,7 @@ export const ProductsPage = () => {
 							{products.map((res) => {
 								return (
 									<ProductItem key={res.id}>
-										<ItemCell>{res.title}</ItemCell>
+										<EditLink to="../editProduct" state={{props: res}}>{res.title}</EditLink>
 										<ItemCell>{res.price}</ItemCell>
 										<ItemCell>{res.unit}</ItemCell>
 										<ItemCell>{res.article}</ItemCell>

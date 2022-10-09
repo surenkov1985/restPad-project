@@ -160,15 +160,35 @@ router.get("/getProducts:category", (req, res) => {
 });
 
 router.delete("/deleteProduct", (req, res) => {
-
-
 	pool.query("DELETE FROM REST_PRODUCTS WHERE id=?", req.body.id, (err, data) => {
 		if (err) {
-			return res.status(400).json({message: err})
+			return res.status(400).json({ message: err });
 		}
 
-		return res.status(200).json(data)
-	}) 
-})
+		return res.status(200).json(data);
+	});
+});
+
+router.put("/editProduct", (req, res) => {
+	if (!req.body.title || !req.body.price || !req.body.amount) {
+		return res.status(400).json({ message: "Заполнеы не все обязательные поля" });
+	}
+
+	const { userId, title, category, article, price, amount, unit, vat, description, color, id } = req.body;
+
+	pool.query(
+		`UPDATE REST_PRODUCTS 
+		SET userId=?, title=?, category=?, article=?, price=?, amount=?, unit=?, vat=?, description=?, color=? 
+		WHERE id=?`,
+		[userId, title, category, article, price, amount, unit, vat, description, color, id],
+		(err, data) => {
+			if (err) {
+				return res.status(400).json({ message: err });
+			}
+
+			return res.status(200).json(data);
+		}
+	);
+});
 
 module.exports = router;

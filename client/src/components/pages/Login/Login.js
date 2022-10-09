@@ -30,7 +30,7 @@ export const LoginPage = () => {
 
 	useEffect(() => {
 		if (localStorage.hasOwnProperty("restPadUser")) {
-			navigate("../admin", { replace: true });
+			navigate("../addOrder", { replace: true });
 			dispatch(authToggle(true));
 		}
 	}, []);
@@ -47,7 +47,7 @@ export const LoginPage = () => {
 						JSON.stringify(loginData)
 					);
 					dispatch(authToggle(true));
-					navigate("../admin", { replace: true });
+					navigate("../addOrder", { replace: true });
 				}
 			})
 			.catch((err) => {

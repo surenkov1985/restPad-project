@@ -1,15 +1,30 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const ProductsCont = styled.div`
 	width: 100%;
+	height: 100%;
 	display: flex;
 	flex-direction: column;
+	border-radius: 8px;
+	box-shadow: 0px 0px 8px 0px rgba(34, 60, 80, 0.2);
+	background: #ffffff;
+`;
+
+export const ProductHead = styled.div`
+	display: flex;
+	align-items: center;
+	column-gap: 50px;
+	padding: 10px 20px;
+	background: #e0e0e0;
+	border-radius: 8px 8px 0 0;
 `;
 
 export const ProductsContent = styled.div`
 	width: 100%;
 	display: flex;
 	flex-direction: row;
+	padding: 10px 20px;
 `;
 
 export const CategoriesBlock = styled.div`
@@ -25,7 +40,7 @@ export const CategoryList = styled.ul`
 export const CategoryItem = styled.li`
 	width: 100%;
 	padding: 10px;
-	background: #bdc2bd;
+	background: #e0e0e0;
 	cursor: pointer;
 
 	&:hover {
@@ -58,6 +73,15 @@ export const ItemCell = styled.div`
 	padding: 5px;
 `;
 
+export const EditLink = styled(Link)`
+	color: #6081f9;
+	cursor: pointer;
+	padding: 5px;
+	&:hover {
+		color: #5166b5;
+	}
+`;
+
 export const ListHead = styled(ProductItem)`
-	background: #f7f7f7;
+	background: #e0e0e0;
 `;

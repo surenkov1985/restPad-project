@@ -50,7 +50,17 @@ export const apiReducer = createApi({
 				},
 			}),
 		}),
+		editProduct: build.mutation({
+			query: (data) => ({
+				url: "/editProduct",
+				method: "PUT",
+				body: data,
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}),
+		}),
 	}),
 });
 
-export const { useLoginMutation, useRegisterMutation, useAddProductMutation, useLazyGetProductsQuery, useDeleteProductMutation } = apiReducer;
+export const { useLoginMutation, useRegisterMutation, useAddProductMutation, useLazyGetProductsQuery, useDeleteProductMutation, useEditProductMutation } = apiReducer;

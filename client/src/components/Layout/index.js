@@ -19,6 +19,7 @@ export const Layout = () => {
 					{isAuth && (
 						<>
 							<AuthLinks>
+								<NavLink to="addOrder">Новый заказ</NavLink>
 								<NavLink to="products">Товары</NavLink>
 								<NavLink to="admin">Личный кабинет</NavLink>
 							</AuthLinks>
