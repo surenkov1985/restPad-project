@@ -68,10 +68,6 @@ export const ProductsPage = () => {
 			.catch((err) => console.log(err.data.message));
 	};
 
-	const editProductHandler = (data) => {
-		console.log(data);
-	};
-
 	return (
 		<ProductsCont>
 			<ProductHead>

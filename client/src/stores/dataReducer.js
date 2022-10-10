@@ -11,6 +11,9 @@ export const dataSlice = createSlice({
 			{ val: "Напитки", activeClass: "" },
 		],
 		categoryProduct: "Роллы",
+		vat: [{ val: "Не облагается" }, { val: "0%" }, { val: "10%" }, { val: "18%" }, { val: "20%" }],
+		units: [{ val: "шт" }, { val: "кг" }, { val: "г" }, { val: "л" }],
+		colors: [{ val: "#7b837b" }, { val: "#a76f8c" }, { val: "#e4ed46" }, { val: "#ff3b3b" }, { val: "#1784b4" }, { val: "#6ea16e" }],
 	},
 	name: "data",
 	reducers: {
