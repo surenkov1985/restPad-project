@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { InputElem, LabelElem } from "./style";
 
 export const InputBlock = (props) => {
-	const { text, formRegister, val, name, required } = props;
+	const { text, formRegister, val, name, required, type } = props;
 	const [value, setValue] = useState(val);
 
 	return (
@@ -13,7 +13,7 @@ export const InputBlock = (props) => {
 			</p>
 
 			<InputElem
-				type="text"
+				type={type || "text"}
 				{...formRegister(name, {
 					value: value,
 					onChange: (e) => {

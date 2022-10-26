@@ -8,6 +8,7 @@ import { AddProductPage } from "./pages/AddProduct/AddProductPage";
 import { AdminPage } from "./pages/Admin/Admin";
 import { EditProductPage } from "./pages/EditProductPage/EditProductPage";
 import { LoginPage } from "./pages/Login/Login";
+import { OrderPage } from "./pages/Orders/OrderPage";
 import { ProductsPage } from "./pages/Produts/Products";
 import { Register } from "./pages/Register/Register";
 
@@ -31,6 +32,7 @@ export const App = () => {
 					<Route path="addProduct" element={<AddProductPage />} />
 					<Route path="addOrder" element={<AddOrder/>}/>
 					<Route path="editProduct" element={<EditProductPage/>}/>
+					<Route path="orders" element={<OrderPage/>} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

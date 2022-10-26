@@ -1,13 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import {
-	AuthLinks,
-	Container,
-	HeaderBlock,
-	MainBlock,
-	MainContainer,
-} from "./style";
+import { AuthLinks, Container, HeaderBlock, MainBlock, MainContainer } from "./style";
 
 export const Layout = () => {
 	const isAuth = useSelector((state) => state.data.isAuth);
@@ -20,6 +14,7 @@ export const Layout = () => {
 						<>
 							<AuthLinks>
 								<NavLink to="addOrder">Новый заказ</NavLink>
+								<NavLink to="orders">Заказы</NavLink>
 								<NavLink to="products">Товары</NavLink>
 								<NavLink to="admin">Личный кабинет</NavLink>
 							</AuthLinks>

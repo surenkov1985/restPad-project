@@ -25,7 +25,7 @@ let transporter = nodemailer.createTransport({
 });
 
 router.get("/", (req, res) => {
-	pool.query("SELECT FROM REST_USERS", (err, data) => {
+	pool.query("SELECT * FROM REST_USERS", (err, data) => {
 		if (err) {
 			return console.log(err);
 		}
@@ -189,6 +189,65 @@ router.put("/editProduct", (req, res) => {
 			return res.status(200).json(data);
 		}
 	);
+});
+
+router.post("/addOrder", (req, res) => {
+	const data = req.body;
+	const orderData = [
+		JSON.stringify(data.order),
+		data.order_date,
+		data.date,
+		data.user_id,
+		data.orderSum,
+		data.comments,
+		data.pay_type,
+		data.phone,
+		data.street,
+		data.house,
+		data.apart,
+		data.front_door,
+		data.floor,
+		data.discount,
+	];
+	const clientData = [data.user_id, data.name, data.phone, data.street, data.house, data.apart, data.front_door, data.floor];
+
+	pool.getConnection((err, connect) => {
+		connect.query("SELECT * FROM CLIENTS WHERE phone=?", [data.phone], (error, data) => {
+			if (error) {
+				return res.status(400).json({ message: "Error required!!" });
+			}
+			console.log(data);
+			if (!data.length) {
+				connect.query(
+					"INSERT INTO CLIENTS (user_id, name, phone, street, house, apart, front_door, floor) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+					clientData,
+					(err, data) => {
+						if (error) {
+							return res.status(400).json({ message: "Error required!!" });
+						}
+
+						orderData.push(data.insertId);
+					}
+				);
+			} else {
+				orderData.push(data[0].id);
+			}
+
+			connect.query(
+				"INSERT INTO ORDERS (order_products, order_date, date, user_id, order_sum, comments, pay_type, phone, street, house, apart, front_door, floor, discount, client_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+				orderData,
+				(err, data) => {
+					if (error) {
+						return res.status(400).json({ message: "Error required!!" });
+					}
+					console.log(data);
+					return res.status(200).json(data);
+				}
+			);
+			// console.log(orderData);
+		});
+		connect.release();
+	});
 });
 
 module.exports = router;

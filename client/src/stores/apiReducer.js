@@ -60,7 +60,17 @@ export const apiReducer = createApi({
 				},
 			}),
 		}),
+		addOrder: build.mutation({
+			query: (data) => ({
+				url: "/addOrder",
+				method: "POST",
+				body: data,
+				headers: {
+					"Content-type": "application/json"
+				}
+			})
+		})
 	}),
 });
 
-export const { useLoginMutation, useRegisterMutation, useAddProductMutation, useLazyGetProductsQuery, useDeleteProductMutation, useEditProductMutation } = apiReducer;
+export const { useLoginMutation, useRegisterMutation, useAddProductMutation, useLazyGetProductsQuery, useDeleteProductMutation, useEditProductMutation, useAddOrderMutation } = apiReducer;
