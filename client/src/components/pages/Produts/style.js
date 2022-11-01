@@ -9,6 +9,7 @@ export const ProductsCont = styled.div`
 	border-radius: 8px;
 	box-shadow: 0px 0px 8px 0px rgba(34, 60, 80, 0.2);
 	background: #ffffff;
+	position: relative;
 `;
 
 export const ProductHead = styled.div`

@@ -195,7 +195,6 @@ router.post("/addOrder", (req, res) => {
 	const data = req.body;
 	const orderData = [
 		JSON.stringify(data.order),
-		data.order_date,
 		data.date,
 		data.user_id,
 		data.orderSum,
@@ -234,7 +233,7 @@ router.post("/addOrder", (req, res) => {
 			}
 
 			connect.query(
-				"INSERT INTO ORDERS (order_products, order_date, date, user_id, order_sum, comments, pay_type, phone, street, house, apart, front_door, floor, discount, client_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+				"INSERT INTO ORDERS (order_products, date, user_id, order_sum, comments, pay_type, phone, street, house, apart, front_door, floor, discount, client_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 				orderData,
 				(err, data) => {
 					if (error) {
@@ -244,9 +243,26 @@ router.post("/addOrder", (req, res) => {
 					return res.status(200).json(data);
 				}
 			);
-			// console.log(orderData);
 		});
 		connect.release();
+	});
+});
+
+router.get("/getOrders:date", (req, res) => {
+	console.log(req.params);
+	const date = new Date(req.params.date);
+	const endDate = new Date(req.params.date);
+	endDate.setHours(23, 59, 59);
+
+	let day = new Date(endDate);
+	console.log(req.params.date, date, day);
+	pool.query("SELECT * FROM ORDERS WHERE DATE(date)=?", [req.params.date], (err, data) => {
+		if (err) {
+			console.log(err);
+			return res.status(400).json({ message: err });
+		}
+
+		return res.status(200).json(data);
 	});
 });
 

@@ -15,7 +15,7 @@ export const dataSlice = createSlice({
 		units: [{ val: "шт" }, { val: "кг" }, { val: "г" }, { val: "л" }],
 		colors: [{ val: "#7b837b" }, { val: "#a76f8c" }, { val: "#e4ed46" }, { val: "#ff3b3b" }, { val: "#1784b4" }, { val: "#6ea16e" }],
 		orderProducts: [],
-		orders: []
+		orders: [],
 	},
 	name: "data",
 	reducers: {
@@ -31,11 +31,8 @@ export const dataSlice = createSlice({
 		setCategory(state, actions) {
 			state.categoryProduct = actions.payload;
 		},
-		setOrders(state, actions) {
-			state.orders = [...state.orders, actions.payload]
-		}
 	},
 });
 
-export const { authToggle, setProducts, categoryToggle, setCategory, setOrders } = dataSlice.actions;
+export const { authToggle, setProducts, categoryToggle, setCategory } = dataSlice.actions;
 export default dataSlice.reducer;

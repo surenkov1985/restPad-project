@@ -69,8 +69,13 @@ export const apiReducer = createApi({
 					"Content-type": "application/json"
 				}
 			})
+		}),
+		getOrders: build.query({
+			query: (date) => ({
+				url: `/getOrders${date}`
+			})
 		})
 	}),
 });
 
-export const { useLoginMutation, useRegisterMutation, useAddProductMutation, useLazyGetProductsQuery, useDeleteProductMutation, useEditProductMutation, useAddOrderMutation } = apiReducer;
+export const { useLoginMutation, useRegisterMutation, useAddProductMutation, useLazyGetProductsQuery, useDeleteProductMutation, useEditProductMutation, useAddOrderMutation, useGetOrdersQuery } = apiReducer;

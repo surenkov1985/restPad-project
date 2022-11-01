@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAddOrderMutation, useLazyGetProductsQuery } from "../../../stores/apiReducer";
-import { categoryToggle, setCategory, setProducts, setOrders } from "../../../stores/dataReducer";
+import { categoryToggle, setCategory, setProducts } from "../../../stores/dataReducer";
 import { NumbInputElem } from "../../numbInput/NumbInputElem";
 import { RiArrowGoBackFill, RiDeleteBin5Line } from "react-icons/ri";
 import {
@@ -138,14 +138,14 @@ export const AddOrder = () => {
 
 	const formSubmitHandler = (data) => {
 		let date = new Date();
-		let orderDate = new Date(data.order_date);
+		let orderDate = data.order_date.replace(/T/, " ");
+		console.log(orderDate);
 		const fetchData = {
 			...data,
 			order: orderProducts,
 			orderSum: orderSum,
 			user_id: user.id,
-			date: date.toLocaleString(),
-			order_date: !data.order_date ? "" : orderDate.toLocaleString(),
+			date: !data.order_date ? null : orderDate,
 			discount: discount,
 		};
 
@@ -156,7 +156,6 @@ export const AddOrder = () => {
 				setOrderProducts([]);
 				setIsProducts(true);
 				setIsDetails(false);
-				dispatch(setOrders(fetchData));
 			})
 			.catch((err) => {
 				console.log(err);

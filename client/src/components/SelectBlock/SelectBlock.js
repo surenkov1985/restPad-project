@@ -8,7 +8,7 @@ export const SelectBlock = (props) => {
 
     return (
 		<LabelElem>
-			<span>{title}</span>
+			{title && <span>{title}</span>}
 			<SelectElem
 				defaultValue={props.category}
 				{...regHandler(name, {
