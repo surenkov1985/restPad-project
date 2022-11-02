@@ -78,4 +78,4 @@ export const apiReducer = createApi({
 	}),
 });
 
-export const { useLoginMutation, useRegisterMutation, useAddProductMutation, useLazyGetProductsQuery, useDeleteProductMutation, useEditProductMutation, useAddOrderMutation, useGetOrdersQuery } = apiReducer;
+export const { useLoginMutation, useRegisterMutation, useAddProductMutation, useLazyGetProductsQuery, useDeleteProductMutation, useEditProductMutation, useAddOrderMutation, useGetOrdersQuery, useLazyGetOrdersQuery } = apiReducer;

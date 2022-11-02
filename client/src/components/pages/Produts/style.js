@@ -86,3 +86,5 @@ export const EditLink = styled(Link)`
 export const ListHead = styled(ProductItem)`
 	background: #e0e0e0;
 `;
+
+

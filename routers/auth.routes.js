@@ -256,7 +256,7 @@ router.get("/getOrders:date", (req, res) => {
 
 	let day = new Date(endDate);
 	console.log(req.params.date, date, day);
-	pool.query("SELECT * FROM ORDERS WHERE DATE(date)=?", [req.params.date], (err, data) => {
+	pool.query("SELECT * FROM ORDERS WHERE DATE(date)=? ORDER BY date DESC", [req.params.date], (err, data) => {
 		if (err) {
 			console.log(err);
 			return res.status(400).json({ message: err });
