@@ -32,8 +32,31 @@ export const OrderPage = () => {
 	const [data, setData] = useState([]);
 	let [getData] = useLazyGetOrdersQuery();
 
+	function getMonday(date) {
+		let day = date.getDay() || 7;
+		if (day !== 1) date.setHours(-24 * (day - 1));
+		return date.toISOString().slice(0, 10);
+	}
+	function getSunday(date) {
+		let day = date.getDay() || 7;
+		if (day !== 1) date.setHours(24 * (7 - day + 1));
+		return date.toISOString().slice(0, 10);
+	}
+	function getMonthDays(date) {
+		let year = date.getFullYear();
+		let month = date.getMonth();
+		let firstDay = new Date(year, month, 1);
+		let lastDay = new Date(year, month + 1, 0);
+
+		return { firstDay: firstDay.toLocaleDateString("en-CA"), lastDay: lastDay.toLocaleDateString("en-CA") };
+	}
+
+	const monday = getMonday(new Date());
+	const sunday = getSunday(new Date());
+	const { firstDay, lastDay } = getMonthDays(date);
+
 	useEffect(() => {
-		getData(date.toISOString().slice(0, 10))
+		getData({ date: date.toISOString().slice(0, 10), endDate: "" })
 			.unwrap()
 			.then((data) => {
 				setData(data);
@@ -44,7 +67,8 @@ export const OrderPage = () => {
 	}, []);
 
 	const onDateSelect = (value) => {
-		getData(value)
+		let obj = dateOptions.find((item) => item.val === value);
+		getData({ date: obj.dates.date, endDate: obj.dates.endDate })
 			.unwrap()
 			.then((data) => {
 				setData(data);
@@ -55,12 +79,12 @@ export const OrderPage = () => {
 	};
 
 	const dateOptions = [
-		{ text: "Завтра " + tomorrowString, val: tomorrowDate, selected: false },
-		{ text: "Сегодня " + todayString, val: today, selected: true },
-		{ text: "Вчера " + yesterdayString, val: yesterdayDate, selected: false },
-		{ text: "Неделя", val: "", selected: false },
-		{ text: "Месяц", val: "", selected: false },
-		{ text: "Период", val: "", selected: false },
+		{ text: "Завтра " + tomorrowString, dates: { date: tomorrowDate, endDate: "" }, val: "tomorrow", selected: false },
+		{ text: "Сегодня " + todayString, dates: { date: today, endDate: "" }, val: "today", selected: true },
+		{ text: "Вчера " + yesterdayString, dates: { date: yesterdayDate, endDate: "" }, val: "yesterday", selected: false },
+		{ text: "Неделя", dates: { date: monday, endDate: sunday }, val: "week", selected: false },
+		{ text: "Месяц", dates: { date: firstDay, endDate: lastDay }, val: "month", selected: false },
+		{ text: "Период", val: { date: yesterdayDate, endDate: "" }, val: "period", selected: false },
 	];
 
 	const payValues = [

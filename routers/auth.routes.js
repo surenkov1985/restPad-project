@@ -248,15 +248,15 @@ router.post("/addOrder", (req, res) => {
 	});
 });
 
-router.get("/getOrders:date", (req, res) => {
-	console.log(req.params);
-	const date = new Date(req.params.date);
-	const endDate = new Date(req.params.date);
+router.get("/getOrders?", (req, res) => {
+	console.log(req.query.date, req.query.endDate);
+	const date = new Date(req.query.date);
+	const endDate = req.query.endDate ? new Date(req.query.endDate) : new Date(req.query.date);
 	endDate.setHours(23, 59, 59);
 
 	let day = new Date(endDate);
-	console.log(req.params.date, date, day);
-	pool.query("SELECT * FROM ORDERS WHERE DATE(date)=? ORDER BY date DESC", [req.params.date], (err, data) => {
+	console.log(date, endDate);
+	pool.query("SELECT * FROM ORDERS WHERE date BETWEEN ? AND ? ORDER BY date DESC", [date, endDate], (err, data) => {
 		if (err) {
 			console.log(err);
 			return res.status(400).json({ message: err });

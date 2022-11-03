@@ -7,15 +7,19 @@ export const SelectBlock = (props) => {
 		setValue(e.target.value);
 	};
 
-    // useEffect(() => {}, )
+	// useEffect(() => {}, )
 
 	return (
-		<select value={value} onChange={(e) => {
-            changeHandler(e)
-            if (onChangeHandler) {
-                onChangeHandler(e.target.value)
-            }
-        }}>
+		<select
+			value={value}
+			onChange={(e) => {
+				changeHandler(e);
+
+				if (onChangeHandler) {
+					onChangeHandler(e.target.value);
+				}
+			}}
+		>
 			{arr.map((opt, index) => {
 				return (
 					<option key={index} value={opt.val}>

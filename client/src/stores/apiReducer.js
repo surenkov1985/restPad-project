@@ -66,16 +66,26 @@ export const apiReducer = createApi({
 				method: "POST",
 				body: data,
 				headers: {
-					"Content-type": "application/json"
-				}
-			})
+					"Content-type": "application/json",
+				},
+			}),
 		}),
 		getOrders: build.query({
-			query: (date) => ({
-				url: `/getOrders${date}`
-			})
-		})
+			query: ({ date, endDate }) => ({
+				url: `/getOrders?date=${date}&endDate=${endDate}`,
+			}),
+		}),
 	}),
 });
 
-export const { useLoginMutation, useRegisterMutation, useAddProductMutation, useLazyGetProductsQuery, useDeleteProductMutation, useEditProductMutation, useAddOrderMutation, useGetOrdersQuery, useLazyGetOrdersQuery } = apiReducer;
+export const {
+	useLoginMutation,
+	useRegisterMutation,
+	useAddProductMutation,
+	useLazyGetProductsQuery,
+	useDeleteProductMutation,
+	useEditProductMutation,
+	useAddOrderMutation,
+	useGetOrdersQuery,
+	useLazyGetOrdersQuery,
+} = apiReducer;
