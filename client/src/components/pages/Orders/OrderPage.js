@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineCalendar, AiOutlineClose } from "react-icons/ai";
+
 import { useGetOrdersQuery, useLazyGetOrdersQuery } from "../../../stores/apiReducer";
 import { SelectBlock } from "./SelectBlock";
+import { dateOptions, payValues, statusValues, workerValues } from "../../../utils/variables";
 import {
 	DateBlock,
 	DeleteButton,
@@ -16,44 +18,14 @@ import {
 	OrderDesc,
 	ProductsList,
 	PayTypeBlock,
+	DatesBlock,
+	CalendarIcon,
 } from "./style";
 
 export const OrderPage = () => {
 	const date = new Date();
-	let dateTime = date.getTime();
-	const [today, setToday] = useState(date.toISOString().slice(0, 10));
-	const yesterday = new Date(dateTime - 24 * 3600 * 1000);
-	const tomorrow = new Date(dateTime + 24 * 3600 * 1000);
-	const tomorrowDate = tomorrow.toISOString().slice(0, 10);
-	const tomorrowString = tomorrow.toLocaleDateString();
-	const yesterdayDate = yesterday.toISOString().slice(0, 10);
-	const yesterdayString = yesterday.toLocaleDateString();
-	const todayString = date.toLocaleDateString();
 	const [data, setData] = useState([]);
 	let [getData] = useLazyGetOrdersQuery();
-
-	function getMonday(date) {
-		let day = date.getDay() || 7;
-		if (day !== 1) date.setHours(-24 * (day - 1));
-		return date.toISOString().slice(0, 10);
-	}
-	function getSunday(date) {
-		let day = date.getDay() || 7;
-		if (day !== 1) date.setHours(24 * (7 - day + 1));
-		return date.toISOString().slice(0, 10);
-	}
-	function getMonthDays(date) {
-		let year = date.getFullYear();
-		let month = date.getMonth();
-		let firstDay = new Date(year, month, 1);
-		let lastDay = new Date(year, month + 1, 0);
-
-		return { firstDay: firstDay.toLocaleDateString("en-CA"), lastDay: lastDay.toLocaleDateString("en-CA") };
-	}
-
-	const monday = getMonday(new Date());
-	const sunday = getSunday(new Date());
-	const { firstDay, lastDay } = getMonthDays(date);
 
 	useEffect(() => {
 		getData({ date: date.toISOString().slice(0, 10), endDate: "" })
@@ -78,82 +50,15 @@ export const OrderPage = () => {
 			});
 	};
 
-	const dateOptions = [
-		{ text: "Завтра " + tomorrowString, dates: { date: tomorrowDate, endDate: "" }, val: "tomorrow", selected: false },
-		{ text: "Сегодня " + todayString, dates: { date: today, endDate: "" }, val: "today", selected: true },
-		{ text: "Вчера " + yesterdayString, dates: { date: yesterdayDate, endDate: "" }, val: "yesterday", selected: false },
-		{ text: "Неделя", dates: { date: monday, endDate: sunday }, val: "week", selected: false },
-		{ text: "Месяц", dates: { date: firstDay, endDate: lastDay }, val: "month", selected: false },
-		{ text: "Период", val: { date: yesterdayDate, endDate: "" }, val: "period", selected: false },
-	];
-
-	const payValues = [
-		{
-			text: "Оплата",
-			val: false,
-			selected: true,
-		},
-		{
-			text: "Не оплачен",
-			val: false,
-			selected: false,
-		},
-		{
-			text: "Оплачен",
-			val: false,
-			selected: false,
-		},
-	];
-
-	const workerValues = [
-		{
-			text: "Все сотрудники",
-			val: "all",
-			selected: true,
-		},
-		{
-			text: "С сотрудником",
-			val: "with",
-			selected: false,
-		},
-		{
-			text: "Без сотрудника",
-			val: "without",
-			selected: false,
-		},
-	];
-
-	const statusValues = [
-		{
-			text: "Все статусы",
-			val: "all",
-			selected: true,
-		},
-		{
-			text: "Новый",
-			val: "new",
-			selected: true,
-		},
-		{
-			text: "В пути",
-			val: "onWay",
-			selected: false,
-		},
-		{
-			text: "Выполнен",
-			val: "completed",
-			selected: false,
-		},
-	];
-
 	console.log(data);
 
 	return (
 		<OrdersCont>
 			<OrderHead>
-				<div>
+				<DatesBlock>
 					<SelectBlock arr={dateOptions} defaultValue={dateOptions[1].val} onChangeHandler={onDateSelect} />
-				</div>
+					<CalendarIcon />
+				</DatesBlock>
 				<PayTypeBlock>Сумма</PayTypeBlock>
 				<PayTypeBlock>%</PayTypeBlock>
 				<div>
@@ -170,8 +75,7 @@ export const OrderPage = () => {
 				<div></div>
 			</OrderHead>
 			{data &&
-				data.map((order, index) => {
-					let date = new Date(order.date);
+				data.map((order) => {
 					let time = date.toLocaleTimeString().slice(0, 5);
 					let day = date.toLocaleDateString();
 					let orderData = JSON.parse(order.order_products);

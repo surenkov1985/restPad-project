@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation, useRegisterMutation } from "../../../stores/apiReducer";
+import { authToggle } from "../../../stores/dataReducer";
 import { ErrorEl, Form, FormContainer, FormPage, Input, InputTitle, Label, NavigateBtn, NavigateEl, Submit, Title } from "./style";
 
 export const Register = () => {
@@ -12,16 +13,16 @@ export const Register = () => {
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const isAuth = useSelector((state) => state.data.isAuth);
 
 	const [registerFetch] = useRegisterMutation();
 	const [loginFetch] = useLoginMutation();
 
 	useEffect(() => {
-		if (localStorage.hasOwnProperty("restPadUser")) {
+		if (isAuth) {
 			navigate("../addOrder", { replace: true });
-			dispatch(authToggle(true));
 		}
-	}, []);
+	}, [isAuth]);
 
 	const submitHandler = (data) => {
 		registerFetch(data)

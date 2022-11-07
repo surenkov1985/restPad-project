@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { ButtonElem } from "../AddProduct/style";
 import { ProductsCont } from "../Produts/style";
+import { AiOutlineCalendar } from "react-icons/ai";
 
 export const OrdersCont = styled(ProductsCont)`
 	overflow-y: auto;
@@ -107,4 +108,19 @@ export const PayTypeBlock = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+`;
+
+export const DatesBlock = styled(DateBlock)`
+	align-items: center;
+	position: relative;
+`;
+export const CalendarIcon = styled(AiOutlineCalendar)`
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	margin-left: 10px;
+
+	&:hover {
+		opacity: 0.7;
+	}
 `;

@@ -1,10 +1,17 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, Outlet } from "react-router-dom";
+import { authToggle } from "../../stores/dataReducer";
 import { AuthLinks, Container, HeaderBlock, MainBlock, MainContainer } from "./style";
 
 export const Layout = () => {
 	const isAuth = useSelector((state) => state.data.isAuth);
+	const dispatch = useDispatch();
+
+	const signOutHandler = () => {
+		localStorage.removeItem("restPadUser");
+		dispatch(authToggle(false));
+	};
 
 	return (
 		<>
@@ -19,7 +26,9 @@ export const Layout = () => {
 								<NavLink to="admin">Личный кабинет</NavLink>
 							</AuthLinks>
 							<AuthLinks>
-								<Link to="login">Выход</Link>
+								<Link onClick={() => signOutHandler()} to="login">
+									Выход
+								</Link>
 							</AuthLinks>
 						</>
 					)}

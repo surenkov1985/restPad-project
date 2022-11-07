@@ -5,19 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../stores/apiReducer";
 import { authToggle } from "../../../stores/dataReducer";
-import {
-	ErrorEl,
-	Form,
-	FormContainer,
-	FormPage,
-	Input,
-	InputTitle,
-	Label,
-	NavigateBtn,
-	NavigateEl,
-	Submit,
-	Title,
-} from "../Register/style";
+import { ErrorEl, Form, FormContainer, FormPage, Input, InputTitle, Label, NavigateBtn, NavigateEl, Submit, Title } from "../Register/style";
 
 export const LoginPage = () => {
 	const { register, handleSubmit } = useForm({
@@ -29,11 +17,10 @@ export const LoginPage = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (localStorage.hasOwnProperty("restPadUser")) {
+		if (isAuth) {
 			navigate("../addOrder", { replace: true });
-			dispatch(authToggle(true));
 		}
-	}, []);
+	}, [isAuth]);
 
 	const [loginFetch] = useLoginMutation();
 
@@ -42,10 +29,7 @@ export const LoginPage = () => {
 			.unwrap()
 			.then((loginData) => {
 				if (loginData.id) {
-					localStorage.setItem(
-						"restPadUser",
-						JSON.stringify(loginData)
-					);
+					localStorage.setItem("restPadUser", JSON.stringify(loginData));
 					dispatch(authToggle(true));
 					navigate("../addOrder", { replace: true });
 				}
@@ -67,20 +51,12 @@ export const LoginPage = () => {
 					{error && <ErrorEl>{error}</ErrorEl>}
 					<Label>
 						<InputTitle>Email</InputTitle>
-						<Input
-							type="text"
-							placeholder="Введите email"
-							{...register("email")}
-						/>
+						<Input type="text" placeholder="Введите email" {...register("email")} />
 					</Label>
 
 					<Label>
 						<InputTitle>Пароль</InputTitle>
-						<Input
-							type="password"
-							placeholder="Введите пароль"
-							{...register("password")}
-						/>
+						<Input type="password" placeholder="Введите пароль" {...register("password")} />
 					</Label>
 
 					<Submit type="submit" value="Войти" />

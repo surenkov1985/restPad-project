@@ -99,7 +99,6 @@ export const AddOrder = () => {
 		}
 	};
 
-	console.log(orderProducts);
 	const incProductHandler = (obj) => {
 		setOrderProducts(
 			orderProducts.map((item) => {

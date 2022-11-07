@@ -19,8 +19,8 @@ let transporter = nodemailer.createTransport({
 	host: "smtp.mail.ru",
 	port: 465,
 	auth: {
-		user: "m.surenkov@mich-man.ru",
-		pass: "M9601663587",
+		user: "no-name@mich-man.ru",
+		pass: "6cAK4KPSU2u2pXASz87L",
 	},
 });
 
@@ -61,7 +61,7 @@ router.post("/register", (req, res) => {
 
 		transporter
 			.sendMail({
-				from: "m.surenkov@mich-man.ru",
+				from: "no-name@mich-man.ru",
 				to: email,
 				subject: "Регистрация в приложении RestPad",
 				text: `Вы успешно зарегистрировались в приложении RestPad. Данные для входа: Login: ${email} , Password: ${password}`,
