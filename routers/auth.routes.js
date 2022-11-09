@@ -20,7 +20,7 @@ let transporter = nodemailer.createTransport({
 	port: 465,
 	auth: {
 		user: "no-name@mich-man.ru",
-		pass: "6cAK4KPSU2u2pXASz87L",
+		pass: "RceJyqd30dGmeeYAxEvx",
 	},
 });
 
@@ -252,17 +252,30 @@ router.get("/getOrders?", (req, res) => {
 	console.log(req.query.date, req.query.endDate);
 	const date = new Date(req.query.date);
 	const endDate = req.query.endDate ? new Date(req.query.endDate) : new Date(req.query.date);
+	const user_id = req.query.user_id;
 	endDate.setHours(23, 59, 59);
 
 	let day = new Date(endDate);
 	console.log(date, endDate);
-	pool.query("SELECT * FROM ORDERS WHERE date BETWEEN ? AND ? ORDER BY date DESC", [date, endDate], (err, data) => {
+	pool.query("SELECT * FROM ORDERS WHERE user_id=? AND date BETWEEN ? AND ? ORDER BY date DESC", [user_id, date, endDate], (err, data) => {
 		if (err) {
 			console.log(err);
 			return res.status(400).json({ message: err });
 		}
 
 		return res.status(200).json(data);
+	});
+});
+
+router.get("/getFirstOrder?", (req, res) => {
+	const user_id = req.query.user_id;
+
+	pool.query("SELECT date FROM ORDERS WHERE user_id=?", [user_id], (err, data) => {
+		if (err) {
+			return res.status(400).json({ message: "Ошибка сервера" });
+		}
+
+		return res.status(200).json(data[0]);
 	});
 });
 
