@@ -71,8 +71,8 @@ export const apiReducer = createApi({
 			}),
 		}),
 		getOrders: build.query({
-			query: ({ date, endDate }) => ({
-				url: `/getOrders?date=${date}&endDate=${endDate}`,
+			query: ({ date, endDate, user_id }) => ({
+				url: `/getOrders?date=${date}&endDate=${endDate}&user_id=${user_id}`,
 			}),
 		}),
 	}),

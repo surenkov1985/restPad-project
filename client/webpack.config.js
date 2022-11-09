@@ -71,12 +71,7 @@ const build = {
 			},
 			{
 				test: /\.(sa|sc|c)ss$/,
-				use: [
-					MiniCssExtractPlugin.loader,
-					"css-loader",
-					"postcss-loader",
-					"sass-loader",
-				],
+				use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
 			},
 			{
 				test: /\.(jpg|png|svg|jpeg|gif)$/i,
@@ -130,6 +125,9 @@ const dev = {
 				errors: true,
 			},
 		},
+	},
+	optimization: {
+		minimize: false,
 	},
 };
 

@@ -21,14 +21,17 @@ import {
 	DatesBlock,
 	CalendarIcon,
 } from "./style";
+import { Calendar } from "../../Calendar/Calendar";
 
 export const OrderPage = () => {
 	const date = new Date();
 	const [data, setData] = useState([]);
 	let [getData] = useLazyGetOrdersQuery();
+	const user_id = JSON.parse(localStorage.getItem("restPadUser")).id;
+	const [isPeriod, setIsPeriod] = useState(false);
 
 	useEffect(() => {
-		getData({ date: date.toISOString().slice(0, 10), endDate: "" })
+		getData({ date: date.toISOString().slice(0, 10), endDate: "", user_id: user_id })
 			.unwrap()
 			.then((data) => {
 				setData(data);
@@ -40,24 +43,30 @@ export const OrderPage = () => {
 
 	const onDateSelect = (value) => {
 		let obj = dateOptions.find((item) => item.val === value);
-		getData({ date: obj.dates.date, endDate: obj.dates.endDate })
-			.unwrap()
-			.then((data) => {
-				setData(data);
-			})
-			.catch((error) => {
-				console.log(error.message);
-			});
+
+		if (obj.val === "period") {
+			setIsPeriod(true);
+		} else {
+			getData({ date: obj.dates.date, endDate: obj.dates.endDate, user_id: user_id })
+				.unwrap()
+				.then((data) => {
+					setData(data);
+				})
+				.catch((error) => {
+					console.log(error.message);
+				});
+		}
 	};
 
 	console.log(data);
 
 	return (
 		<OrdersCont>
+			{isPeriod && <Calendar />}
 			<OrderHead>
 				<DatesBlock>
 					<SelectBlock arr={dateOptions} defaultValue={dateOptions[1].val} onChangeHandler={onDateSelect} />
-					<CalendarIcon />
+					<CalendarIcon onClick={() => setIsPeriod(!isPeriod)}/>
 				</DatesBlock>
 				<PayTypeBlock>Сумма</PayTypeBlock>
 				<PayTypeBlock>%</PayTypeBlock>

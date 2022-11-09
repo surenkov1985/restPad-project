@@ -37,6 +37,7 @@ export const OrderHead = styled.div`
 export const OrderItem = styled.div`
 	display: flex;
 	flex-direction: column;
+	opacity: 0.99;
 `;
 
 export const OrderItemHead = styled(OrderHead)`
