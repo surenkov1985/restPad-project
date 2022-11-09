@@ -47,3 +47,4 @@ package-lock.json
 settings.json
 default.json
 routers
+auth.routes.js
