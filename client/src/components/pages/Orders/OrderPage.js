@@ -66,7 +66,7 @@ export const OrderPage = () => {
 			<OrderHead>
 				<DatesBlock>
 					<SelectBlock arr={dateOptions} defaultValue={dateOptions[1].val} onChangeHandler={onDateSelect} />
-					<CalendarIcon onClick={() => setIsPeriod(!isPeriod)}/>
+					<CalendarIcon onClick={() => setIsPeriod(!isPeriod)} />
 				</DatesBlock>
 				<PayTypeBlock>Сумма</PayTypeBlock>
 				<PayTypeBlock>%</PayTypeBlock>
@@ -87,7 +87,7 @@ export const OrderPage = () => {
 				data.map((order) => {
 					let time = date.toLocaleTimeString().slice(0, 5);
 					let day = date.toLocaleDateString();
-					let orderData = JSON.parse(order.order_products);
+					let orderData = JSON.parse(order.orderProducts);
 					let orderDesc =
 						order.street +
 						(order.house ? " д." + order.house : "") +

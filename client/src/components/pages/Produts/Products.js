@@ -8,6 +8,8 @@ import {
 	CategoriesBlock,
 	CategoryItem,
 	CategoryList,
+	ColorCell,
+	DeletedButton,
 	EditLink,
 	ItemCell,
 	ListHead,
@@ -26,9 +28,13 @@ export const ProductsPage = () => {
 	let { products, categories, categoryProduct } = useSelector((state) => state.data);
 	const [getProducts] = useLazyGetProductsQuery();
 	const [deleteProduct] = useDeleteProductMutation();
+	const userId = JSON.parse(localStorage.getItem("restPadUser")).id;
 
 	useEffect(() => {
-		getProducts(categoryProduct)
+		const url = new URLSearchParams({ category: categoryProduct, userId: userId });
+		console.log(categoryProduct);
+
+		getProducts(url.toString())
 			.unwrap()
 			.then((data) => {
 				console.log(data);
@@ -52,10 +58,11 @@ export const ProductsPage = () => {
 	};
 
 	const deleteProductHandler = (id) => {
-		deleteProduct({ id: id })
+		const url = new URLSearchParams({ category: categoryProduct, userId: userId });
+		deleteProduct({ id: id, userId: userId })
 			.unwrap()
 			.then((data) => {
-				getProducts(categoryProduct)
+				getProducts(url.toString())
 					.unwrap()
 					.then((data) => {
 						console.log(data);
@@ -111,15 +118,19 @@ export const ProductsPage = () => {
 							{products.map((res) => {
 								return (
 									<ProductItem key={res.id}>
-										<EditLink to="../editProduct" state={{props: res}}>{res.title}</EditLink>
+										<EditLink to="../editProduct" state={{ props: res }}>
+											{res.title}
+										</EditLink>
 										<ItemCell>{res.price}</ItemCell>
 										<ItemCell>{res.unit}</ItemCell>
 										<ItemCell>{res.article}</ItemCell>
-										<ItemCell>{res.color}</ItemCell>
-										<ItemCell>{res.description}</ItemCell>
-										<ItemCell onClick={(e) => deleteProductHandler(res.id)}>
-											<AiOutlineClose color="red" />
+										<ItemCell>
+											<ColorCell color={res.color} />
 										</ItemCell>
+										<ItemCell>{res.description}</ItemCell>
+										<DeletedButton onClick={(e) => deleteProductHandler(res.id)}>
+											<AiOutlineClose color="red" size={20} />
+										</DeletedButton>
 									</ProductItem>
 								);
 							})}

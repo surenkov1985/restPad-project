@@ -17,6 +17,7 @@ export const EditProductPage = () => {
 	const [error, setError] = useState("");
 
 	const { categories, vat, units,colors } = useSelector((state) => state.data);
+	const userId = JSON.parse(localStorage.getItem("restPadUser")).id;
 
 	const [editProduct] = useEditProductMutation();
 

@@ -30,13 +30,13 @@ export const apiReducer = createApi({
 				method: "POST",
 				body: data,
 				headers: {
-					"Contennt-Type": "applicetion/json",
+					"Content-Type": "application/json",
 				},
 			}),
 		}),
 		getProducts: build.query({
 			query: (url) => ({
-				url: `/getProducts${url}`,
+				url: `/getProducts?${url}`,
 				method: "GET",
 			}),
 		}),

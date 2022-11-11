@@ -1,6 +1,5 @@
 const webpack = require("webpack");
 const path = require("path");
-const fs = require("fs");
 const ES6Promise = require("es6-promise");
 ES6Promise.polyfill();
 
@@ -71,7 +70,17 @@ const build = {
 			},
 			{
 				test: /\.(sa|sc|c)ss$/,
-				use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
+				use: [
+					MiniCssExtractPlugin.loader,
+					{
+						loader: "css-loader",
+						options: { importLoaders: 1 },
+					},
+					{
+						loader: "postcss-loader",
+					},
+					"sass-loader",
+				],
 			},
 			{
 				test: /\.(jpg|png|svg|jpeg|gif)$/i,
@@ -88,7 +97,7 @@ const build = {
 				},
 			},
 			{
-				test: /\.js$/,
+				test: /\.[jt]sx?$/,
 				exclude: /node-modules/,
 				use: {
 					loader: "babel-loader",
@@ -96,11 +105,6 @@ const build = {
 						cacheDirectory: true,
 					},
 				},
-			},
-			{
-				test: /\.[jt]sx?$/,
-				loader: "babel-loader",
-				exclude: /node_modules/,
 			},
 		],
 	},

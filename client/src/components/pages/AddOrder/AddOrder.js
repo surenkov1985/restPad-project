@@ -47,7 +47,8 @@ export const AddOrder = () => {
 	const [addOrder] = useAddOrderMutation();
 
 	useEffect(() => {
-		getProducts(categoryProduct)
+		const url = new URLSearchParams({ category: categoryProduct, userId: user.id });
+		getProducts(url.toString())
 			.unwrap()
 			.then((data) => {
 				dispatch(setProducts(data));

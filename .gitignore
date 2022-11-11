@@ -30,6 +30,8 @@ test
 *.log
 *.sql
 *.sqlite
+*.env
+.env
 
 # Other
 npm-debug.log*

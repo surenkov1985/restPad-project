@@ -74,6 +74,22 @@ export const ItemCell = styled.div`
 	padding: 5px;
 `;
 
+export const DeletedButton = styled(ItemCell)`
+	cursor: pointer;
+
+	&:hover {
+		opacity: 0.7;
+	}
+`;
+export const ColorCell = styled.div.attrs((props) => ({
+	background: props.color,
+}))`
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background-color: ${(props) => props.color};
+`;
+
 export const EditLink = styled(Link)`
 	color: #6081f9;
 	cursor: pointer;
@@ -86,5 +102,3 @@ export const EditLink = styled(Link)`
 export const ListHead = styled(ProductItem)`
 	background: #e0e0e0;
 `;
-
-
