@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { DaysBlock, WeekDays } from "./WeekDays";
 import { MdOutlineArrowBackIos, MdOutlineArrowForwardIos } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { replaceItem, setCalendar} from "../../stores/calendarReducer";
 
 const CalendarBlock = styled.div`
 	display: flex;
@@ -129,40 +131,17 @@ const DayText = styled.div`
 	}
 `;
 
-export const Calendar = () => {
-	// class Dates {
-	// 	months;
-	// 	date;
+export const Calendar = (props) => {
+	const { datesSelect } = props;
+	const { calendarDays, months } = useSelector((state) => state.calendar);
+	const dispatch = useDispatch();
 
-	// 	constructor(date) {
-	// 		this.months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-	// 		this.date = date;
-	// 	}
-
-	// 	get today() {
-	// 		return this.date.getDate()
-	// 	}
-
-	//     get fullYear() {
-
-	//     }
-	// }
-
-	const getDates = () => {
-		let date = new Date();
-		const today = date.getDate();
-		const todayString = date.toLocaleString();
-	};
-	const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-	const calendarDays = [];
 	let date = new Date();
-	const today = date.getDate();
 	const [todayMonth, setTodayMonth] = useState(date.getMonth());
 	const [fullYear, setFullYear] = useState(date.getFullYear());
 	const [fullMonth, setFullMonth] = useState(months[todayMonth]);
 	const lastDate = new Date(fullYear, todayMonth + 1, 0).getDate();
 	const firstWeekDay = new Date(fullYear, todayMonth, 1).getDay();
-	const lastWeekDay = new Date(fullYear, todayMonth + 1, 0).getDay();
 
 	const [startDate, setStartDate] = useState("");
 	const [endDate, setSEndDate] = useState("");
@@ -170,53 +149,68 @@ export const Calendar = () => {
 	const [firstOrderDate, setFirstOrderDate] = useState(null);
 	const user_id = JSON.parse(localStorage.getItem("restPadUser")).id;
 
-	console.log(lastDate);
+	function setCalendarDays() {
+		const days = [];
 
-	for (let i = 1; i <= lastDate; i++) {
-		let resDate = new Date(fullYear, todayMonth, i);
-		calendarDays.push({
-			day: i,
-			monthNum: todayMonth,
-			year: fullYear,
-			month: ["current", resDate.toLocaleDateString() === date.toLocaleDateString() ? "today" : ""],
-			id: "c" + i,
-		});
-	}
-
-	if (firstWeekDay !== 1) {
-		for (let i = 0; i < firstWeekDay - 1; i++) {
-			calendarDays.unshift({
-				day: new Date(fullYear, todayMonth, -i).getDate(),
-				monthNum: todayMonth - 1,
+		for (let i = 1; i <= lastDate; i++) {
+			let resDate = new Date(fullYear, todayMonth, i);
+			days.push({
+				day: i,
+				monthNum: todayMonth,
 				year: fullYear,
-				month: ["previous"],
-				id: "pr" + i,
+				activeClass: "",
+				month: ["current", resDate.toLocaleDateString() === date.toLocaleDateString() ? "today" : ""],
+				id: "c" + i,
 			});
 		}
-	}
 
-	for (let i = 1; calendarDays.length < 42; i++) {
-		calendarDays.push({ day: i, monthNum: todayMonth + 1, year: fullYear, month: ["next"], id: "n" + i });
+		if (firstWeekDay !== 1) {
+			for (let i = 0; i < firstWeekDay - 1; i++) {
+				days.unshift({
+					day: new Date(fullYear, todayMonth, -i).getDate(),
+					monthNum: todayMonth - 1,
+					year: fullYear,
+					activeClass: "",
+					month: ["previous"],
+					id: "pr" + i,
+				});
+			}
+		}
+
+		for (let i = 1; days.length < 42; i++) {
+			days.push({ day: i, monthNum: todayMonth + 1, year: fullYear, activeClass: "", month: ["next"], id: "n" + i });
+		}
+
+		return days;
 	}
 
 	const setDatesPeriod = (e, obj) => {
 		let date = new Date(fullYear, todayMonth, obj.day);
-		obj.month.push("active");
-		calendarDays.map((res) => {
-			if (res.id === obj.id) {
-				return obj;
-			}
-			return res;
-		});
-		e.currentTarget.classList.add("active");
+		console.log(obj);
+		obj = { ...obj, activeClass: "active" };
+		dispatch(replaceItem(obj));
+
 		if (!startDate) {
-			setStartDate(date.toLocaleString().replace(",", " "));
-		} else {
-			setSEndDate(date.toLocaleString().replace(",", " "));
+			setStartDate(date);
+		} else if (!endDate) {
+			setSEndDate(date);
 		}
 	};
 
+	const resetDatesPeriod = () => {
+		setStartDate("");
+		setSEndDate("");
+		dispatch(
+			setCalendar(
+				calendarDays.map((item) => {
+					return { ...item, activeClass: "" };
+				})
+			)
+		);
+	};
+
 	useEffect(() => {
+		dispatch(setCalendar(setCalendarDays()));
 		fetch(`http://localhost:5000/getFirstOrder?user_id=${user_id}`)
 			.then((result) => {
 				return result.json();
@@ -237,7 +231,10 @@ export const Calendar = () => {
 			setFullYear(newDate.getFullYear());
 			setTodayMonth(newDate.getMonth());
 		}
+		dispatch(setCalendar(setCalendarDays()));
 	}, [todayMonth]);
+
+	console.log(calendarDays);
 
 	return (
 		<CalendarBlock>
@@ -266,33 +263,47 @@ export const Calendar = () => {
 					</CalendarHead>
 					<WeekDays />
 					<DaysBlock>
-						{calendarDays.map((res) => {
-							return (
-								<DateEl
-									key={res.id + res.month}
-									className={res.month.join(" ") + " " + ""}
-									onClick={(e) => {
-										console.log(res.year + "-" + res.monthNum + "-" + res.day);
-										setDatesPeriod(e, res);
-									}}
-								>
-									<DayText>{res.day}</DayText>
-								</DateEl>
-							);
-						})}
+						{calendarDays &&
+							calendarDays.map((res) => {
+								return (
+									<DateEl
+										key={res.id + res.month}
+										className={res.month.join(" ") + " " + res.activeClass}
+										onClick={(e) => {
+											console.log(res.year + "-" + res.monthNum + "-" + res.day);
+											setDatesPeriod(e, res);
+										}}
+									>
+										<DayText>{res.day}</DayText>
+									</DateEl>
+								);
+							})}
 					</DaysBlock>
 				</div>
 				<div></div>
 			</CalendarHead>
 
 			<CalendarHead style={{ columnGap: "10px", padding: "10px 20px" }}>
-				<input type="text" value={startDate} />
-				<input type="text" value={endDate} />
+				<input type="text" value={startDate.toLocaleString().replace(",", "")} onChange={() => {}} />
+				<input type="text" value={endDate.toLocaleString().replace(",", "")} onChange={() => {}} />
 			</CalendarHead>
 			<CalendarHead style={{ padding: "10px 30px" }}>
-				<DateControl>Выбрать</DateControl>
+				<DateControl
+					onClick={() => {
+						datesSelect({ date: startDate, endDate: endDate });
+						resetDatesPeriod();
+					}}
+				>
+					Выбрать
+				</DateControl>
 				<DateControl>Сегодня</DateControl>
-				<DateControl>Сброс</DateControl>
+				<DateControl
+					onClick={() => {
+						resetDatesPeriod();
+					}}
+				>
+					Сброс
+				</DateControl>
 			</CalendarHead>
 		</CalendarBlock>
 	);

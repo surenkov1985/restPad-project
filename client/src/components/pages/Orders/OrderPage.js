@@ -58,11 +58,25 @@ export const OrderPage = () => {
 		}
 	};
 
+	const periodSelect = (obj) => {
+		setIsPeriod(false);
+		if (obj.date && ActiveXObject.endDate) {
+			getData({ date: obj.date.toISOString(), endDate: obj.endDate.toISOString(), user_id: user_id })
+				.unwrap()
+				.then((data) => {
+					setData(data);
+				})
+				.catch((error) => {
+					console.log(error.message);
+				});
+		}
+	};
+
 	console.log(data);
 
 	return (
 		<OrdersCont>
-			{isPeriod && <Calendar />}
+			{isPeriod && <Calendar datesSelect={periodSelect} />}
 			<OrderHead>
 				<DatesBlock>
 					<SelectBlock arr={dateOptions} defaultValue={dateOptions[1].val} onChangeHandler={onDateSelect} />
@@ -85,8 +99,8 @@ export const OrderPage = () => {
 			</OrderHead>
 			{data &&
 				data.map((order) => {
-					let time = date.toLocaleTimeString().slice(0, 5);
-					let day = date.toLocaleDateString();
+					let time = new Date(order.createdAt);
+					let day = new Date(order.createdAt);
 					let orderData = JSON.parse(order.orderProducts);
 					let orderDesc =
 						order.street +
@@ -99,8 +113,8 @@ export const OrderPage = () => {
 						<OrderItem key={order.id}>
 							<OrderItemHead>
 								<DateBlock>
-									<OrderTime>{time} </OrderTime>
-									<OrderDate>{day}</OrderDate>
+									<OrderTime>{time.toLocaleTimeString().slice(0, 5)} </OrderTime>
+									<OrderDate>{day.toLocaleDateString()}</OrderDate>
 									<OrderButton>Изменить</OrderButton>
 									<OrderButton>Печать</OrderButton>
 								</DateBlock>

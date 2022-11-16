@@ -22,13 +22,13 @@ let transporter = nodemailer.createTransport({
 });
 
 router.get("/", (req, res) => {
-	pool.query("SELECT * FROM REST_USERS", (err, data) => {
-		if (err) {
+	User.findAll()
+		.then((result) => {
+			return console.log("DATABASE CONNECT");
+		})
+		.catch((err) => {
 			return console.log(err);
-		}
-
-		return console.log("DATABASE CONNECT");
-	});
+		});
 });
 
 router.post("/register", (req, res) => {
@@ -84,7 +84,6 @@ router.post("/register", (req, res) => {
 
 router.post("/login", (req, res) => {
 	if (req.body.email === "") {
-		console.log(req.body);
 		return res.status(400).json({
 			message: "Поля email и пароль обязательны для заполнения",
 		});
@@ -162,7 +161,7 @@ router.post("/addProducts", (req, res) => {
 
 router.get("/getProducts?", (req, res) => {
 	const category = req.query.category;
-	console.log(req.query);
+	
 	const userId = req.query.userId;
 
 	User.findByPk(userId)
@@ -281,11 +280,13 @@ router.post("/addOrder", (req, res) => {
 });
 
 router.get("/getOrders?", (req, res) => {
-	console.log(req.query.date, req.query.endDate);
+	
 	const date = new Date(req.query.date);
 	const endDate = req.query.endDate ? new Date(req.query.endDate) : new Date(req.query.date);
 	const user_id = req.query.user_id;
 	endDate.setHours(23, 59, 59);
+
+	console.log(date, req.query.endDate);
 
 	let day = new Date(endDate);
 
@@ -293,7 +294,7 @@ router.get("/getOrders?", (req, res) => {
 		where: {
 			restUserId: user_id,
 			createdAt: {
-				[Op.between]: [date, day],
+				[Op.between]: [date, endDate],
 			},
 		},
 		order: [["createdAt", "DESC"]],
